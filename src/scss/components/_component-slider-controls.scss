@@ -1,0 +1,70 @@
+.slider-controls {
+  @include flex(inline-flex, row, center, center, center);
+  position: relative;
+  padding: $p-1;
+  background-color: $color-brand-primary;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100vw;
+    left: -100vw;
+    height: 36px;
+    background-color: $color-brand-primary;
+  }
+
+  .slick-dots {
+    @include flex(flex, row, center, center, center);
+    position: relative;
+    padding: 0 $p-1;
+    bottom: 0;
+
+    li {
+      @include flex(flex, row, column, center, center);
+      border: 2px solid $color-white;
+      border-radius: 50%;
+      width: calc(#{$p-2} * .75);
+      height: calc(#{$p-2} * .75);
+
+      &.slick-active {
+        background-color: $color-white;
+      }
+
+      &:not(:last-child) {
+        margin: 0 $p-1 0 0;
+      }
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  button {
+    @include flex(flex, column, center, center, center);
+  }
+
+  button[data-control="slickPrev"],
+  button[data-control="slickNext"] {
+    svg {
+      width: 22px;
+      height: 16px;
+    }
+  }
+
+  button[data-control="slickPlay"] {
+    margin: 0 calc(#{$p-2} / 2) 0 $p-1;
+  }
+
+  button[data-control="slickPlay"],
+  button[data-control="slickPause"] {
+    svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    svg:nth-child(2) {
+      display: none;
+    }
+  }
+}

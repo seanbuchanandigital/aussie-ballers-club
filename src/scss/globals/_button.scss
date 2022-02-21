@@ -1,0 +1,18 @@
+.btn-default {
+  @animate(background-color, color);
+  display: inline-block;
+  border: 2px solid transparent;
+  text-transform: uppercase;
+  padding: $p-1 $p-3;
+  font-weight: 500;
+
+  &.inverse {
+    color: $color-brand-primary;
+    background-color: $color-white;
+  }
+
+  &.inverse:hover {
+    color: $color-white;
+    background-color: $color-brand-primary;
+  }
+}

@@ -1,0 +1,38 @@
+@mixin animate($properties...){
+  $transition: ();
+  @each $property in $properties {
+    $transition: append($transition, ($property .3s ease-in-out), $separator: comma);
+  }
+}
+
+@mixin flex($display: flex, $direction: row, $align-content: center, $align-items: center, $justify-content: center){
+  display: $display;
+  flex-direction: $direction;
+  align-items: $align-items;
+  align-content: $align-content;
+  justify-content: $justify-content;
+}
+
+@mixin for-phone {
+  @media only screen and (min-width: map-get($break-points, small)){
+    @content;
+  }
+}
+
+@mixin for-tablet {
+  @media only screen and (min-width: map-get($break-points, small)){
+    @content;
+  }
+}
+
+@mixin for-laptop {
+  @media only screen and (min-width: map-get($break-points, small)){
+    @content;
+  }
+}
+
+@mixin for-desktop {
+  @media only screen and (min-width: map-get($break-points, small)){
+    @content;
+  }
+}

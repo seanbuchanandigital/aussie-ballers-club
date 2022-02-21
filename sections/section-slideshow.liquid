@@ -1,437 +1,190 @@
 {%- comment -%} /sections/slideshow.liquid {%- endcomment -%}
 
 {%- liquid
-	assign transition = section.settings.transition
-	assign autoplay = section.settings.autoplay
-	assign duration = section.settings.duration | times: 1000
-	assign content_alignment = section.settings.content_alignment
-	assign slide_height = section.settings.slide_height
 	assign slides_count = section.blocks.size
 -%}
 
-<div class="slider slider--{{ transition }} slider--{{ content_alignment }}{% if section.settings.show_arrow_down %} slider--has-arrow{% endif %} {{ slide_height }}"
-	id="Slideshow--{{ section.id }}"
-	data-section-type="slider"
-	data-section-id="{{ section.id }}"
-	data-slides-count="{{ section.blocks.size }}"
-	data-autoplay="{{ autoplay }}"
-	data-duration="{{ duration }}"
-	data-image-height="{{ slide_height }}"
-	data-page-dots="{{ section.settings.show_nav_dots }}"
-	data-nav-arrows="{{ section.settings.show_nav_arrows }}"
-	data-transition="{{ transition }}"
-	data-slides="{{ slides_count }}">
+<section class="abc-slideshow">
+	{%- if section.blocks.size > 1 -%}
+		<div class="slick-slider">
+			{%- for block in section.blocks -%}
+				{%- liquid
+					assign image = block.settings.image
+					assign btn_link =  block.settings.slide_btn_link | default: '#'
+				-%}
 
-	{%- if section.blocks.size > 0 -%}
-		{%- if section.settings.show_nav_arrows and section.blocks.size > 1 -%}
-			<button class="slider__arrow flickity-prev-next-button previous" data-arrow-left>
-				<span class="visually-hidden">{{ 'general.accessibility.arrow_previous' | t }}</span>
-			</button>
-			<button class="slider__arrow flickity-prev-next-button next" data-arrow-right>
-				<span class="visually-hidden">{{ 'general.accessibility.arrow_next' | t }}</span>
-			</button>
-		{%- endif -%}
-
-		{%- for block in section.blocks -%}
-
-			{%- liquid
-				assign image = block.settings.image
-				assign image_aspect_ratio = image.aspect_ratio | default: 2.63
-				assign image_mobile = block.settings.image_mobile
-				assign image_mobile_aspect_ratio = image_mobile.aspect_ratio | default: 0.66
-				assign bg_position = block.settings.bg_position
-				assign overlay_opacity = block.settings.overlay_opacity | times: 0.01 | round: 2
-				assign btn_link = block.settings.slide_btn_link | default: '#'
-				assign btn_link_2 =  block.settings.slide_btn_link_2 | default: '#'
-			-%}
-
-			{%- style -%}
-				#Slideshow--{{ section.id }} .item--{{ block.id }} { --overlay-opacity: {{ overlay_opacity }}; }
-			{%- endstyle -%}
-
-			<div class="item item--{{ block.id }} item--{{ block.settings.text_color }} {{ slide_height }} initial-slide" {{ block.shopify_attributes }} data-slide-position="{{ forloop.index }}" data-style="{{ block.settings.text_color }}">
-				<div class="overlay"></div>
-
-				{%- if image_mobile -%}
-					<div class="slide__image__container slide__image__container--mobile" style="padding-top: {{ 100 | divided_by: image_mobile_aspect_ratio | append: '%' }}">
-						<div class="slide__image bg-pos-{{ bg_position }} lazyload"
-							data-bgset="{% render 'bgset', image: image_mobile %}"
-							data-sizes="auto"
-							data-parent-fit="cover">
-						</div>
-						<noscript>
-							<div class="slide__image bg-pos-{{ bg_position }}" style="background-image: url({{ image_mobile | img_url: '2048x' }});"></div>
-						</noscript>
-					</div>
-				{%- endif -%}
-
-				<div class="slide__image__container slide__image__container--desktop{% unless image %} slide__image__container--placeholder{% endunless %}" style="padding-top: {{ 100 | divided_by: image_aspect_ratio | append: '%' }}">
+				<div class="slick-item">
 					{%- if image -%}
-						<div class="slide__image bg-pos-{{ bg_position }} lazyload"
-							data-bgset="{% render 'bgset', image: image %}"
-							data-sizes="auto"
-							data-parent-fit="cover">
-						</div>
-						<noscript>
-							<div class="slide__image bg-pos-{{ bg_position }}" style="background-image: url({{ image | img_url: '2048x' }});"></div>
-						</noscript>
+						<span class="background-image" style="background-image: url({{ image | image_url: width: 1920 }});"></span>
 					{%- else -%}
-						<div class="slide__image slide__image--desktop slide__image--placeholder">
-							<div class="slide__image__svg">
-								{%- capture index -%}{% cycle 1, 2 %}{%- endcapture -%}
-								{{- 'lifestyle-' | append: index | placeholder_svg_tag: 'placeholder-svg-filled' -}}
-							</div>
-						</div>
+						<span class="background-image" style="background-image: url({{ '1920x500.png' | asset_url }});"></span>
 					{%- endif -%}
-				</div>
 
-				<div class="slide__text-block">
-					<div class="wrapper wrapper--small">
-						{%- if block.settings.title != blank -%}
-							<h1 class="slide__heading main-heading">{{ block.settings.title | escape }}</h1>
-						{%- endif -%}
+					<div class="wrapper">
+						<div class="row">
+							<div class="col">
+								<div class="card">
+									{%- if block.settings.slide_subheading != blank -%}
+										<span class="tag-line">{{ block.settings.slide_subheading | escape | newline_to_br }}</span>
+									{%- endif -%}
 
-						{%- if block.settings.slide_subheading != blank -%}
-							<h2 class="slide__caption main-subheading">{{ block.settings.slide_subheading | escape | newline_to_br }}</h2>
-						{%- endif -%}
+									{%- if block.settings.title != blank -%}
+										<h2 role="heading" aria-level="2">{{ block.settings.title | escape }}</h2>
+									{%- endif -%}
 
-						{%- if block.settings.slide_btn_text != blank or block.settings.slide_btn_text_2 != blank or block.settings.video_btn_text != blank -%}
-							<div class="slide__buttons">
-								{%- if block.settings.slide_btn_text != blank -%}
-									<a class="slide__btn btn btn--{{ block.settings.slide_btn_style }}" href="{{ btn_link }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %}>{{ block.settings.slide_btn_text | escape }}</a>
-								{%- endif -%}
-								{%- if block.settings.slide_btn_text_2 != blank -%}
-									<a class="slide__btn btn btn--{{ block.settings.slide_btn_style_2 }}" href="{{ btn_link_2 }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %}>{{ block.settings.slide_btn_text_2 | escape }}</a>
-								{%- endif -%}
-								{%- if block.settings.video_btn_link != blank -%}
-									<a class="slide__btn video-text-link" href="{{ block.settings.video_btn_link }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %} data-play-button>
-										{%- if block.settings.video_btn_text != blank -%}
-											{%- render 'icon-play' -%}
-											<span>{{ block.settings.video_btn_text }}</span>
-										{%- endif -%}
-									</a>
-								{%- endif -%}
+									{%- if block.settings.slide_btn_text != blank -%}
+										<a role="link" class="btn-default inverse" href="{{ btn_link }}">{{ block.settings.slide_btn_text | escape }}</a>
+									{%- endif -%}
+								</div>
 							</div>
-						{%- endif -%}
+						</div>
 					</div>
 				</div>
-			</div>
-		{%- endfor -%}
+			{%- endfor -%}
+		</div>
 	{%- else -%}
-		{%- if section.settings.show_nav_arrows -%}
-			<button class="slider__arrow flickity-prev-next-button previous" data-arrow-left>
-				<span class="visually-hidden">{{ 'general.accessibility.arrow_previous' | t }}</span>
-			</button>
+		<div class="slick-banner">
+			{%- for block in section.blocks -%}
+				{%- liquid
+					assign image = block.settings.image
+					assign btn_link =  block.settings.slide_btn_link | default: '#'
+				-%}
 
-			<button class="slider__arrow flickity-prev-next-button next" data-arrow-right>
-				<span class="visually-hidden">{{ 'general.accessibility.arrow_next' | t }}</span>
-			</button>
-		{%- endif -%}
+				<div class="slick-item">
+					{%- if image -%}
+						<span class="background-image" style="background-image: url({{ image | image_url: width: 1920 }});"></span>
+					{%- else -%}
+						<span class="background-image" style="background-image: url({{ '1920x500.png' | asset_url }});"></span>
+					{%- endif -%}
 
-		{%- for i in (1..2) -%}
-			{%- assign btn_link = "#" -%}
+					<div class="wrapper">
+						<div class="row">
+							<div class="col">
+								<div class="card">
+									{%- if block.settings.slide_subheading != blank -%}
+										<span class="tag-line">{{ block.settings.slide_subheading | escape | newline_to_br }}</span>
+									{%- endif -%}
 
-			{%- style -%}
-				#Slideshow--{{ section.id }} .item--{{ forloop.index }} { --overlay-opacity: 0.2; }
-			{%- endstyle -%}
+									{%- if block.settings.title != blank -%}
+										<h2 role="heading" aria-level="2">{{ block.settings.title | escape }}</h2>
+									{%- endif -%}
 
-			<div class="item item--{{ forloop.index }} item--text-light {{ slide_height }} initial-slide" data-slide-position="{{ forloop.index }}" data-style="text-light">
-				<div class="overlay"></div>
-
-				<div class="slide__image__container slide__image__container--desktop slide__image__container--placeholder">
-					<div class="slide__image slide__image--desktop slide__image--placeholder">
-						<div class="slide__image__svg">
-							{%- capture index -%}{% cycle 1, 2 %}{%- endcapture -%}
-							{{- 'lifestyle-' | append: index | placeholder_svg_tag: 'placeholder-svg-filled' -}}
+									{%- if block.settings.slide_btn_text != blank -%}
+										<a role="link" class="btn-default inverse" href="{{ btn_link }}">{{ block.settings.slide_btn_text | escape }}</a>
+									{%- endif -%}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			{%- endfor -%}
+		</div>
+	{%- endif -%}
 
-				<div class="slide__text-block">
-					<div class="wrapper wrapper--small">
-						<h1 class="slide__heading main-heading">{{ 'homepage.onboarding.slideshow.heading' | t }}</h1>
-
-						<h2 class="slide__caption main-subheading">{{ 'homepage.onboarding.slideshow.subheading' | t }}</h2>
-
-						<div class="slide__buttons">
-							<a class="slide__btn btn btn--primary" href="{{ btn_link }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %}>{{ 'homepage.onboarding.slideshow.button_text' | t }}</a>
-
-							<a class="slide__btn video-text-link" href="{{ block.settings.video_btn_link }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %} data-play-button>
-								{%- render 'icon-play' -%}
-								<span>{{ 'homepage.onboarding.slideshow.video_button_text' | t }}</span>
-							</a>
-						</div>
-					</div>
+	{%- if section.blocks.size > 1 -%}
+		<div class="slick-slider-controls">
+			<div class="wrapper">
+				<div class="slider-controls">
+					<button type="button" data-control="slickPrev">
+						<svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg" class="uk-preserve uk-svg">
+							<path d="M21 9C21.5523 9 22 8.55228 22 8C22 7.44772 21.5523 7 21 7V9ZM0.292892 7.29289C-0.0976315 7.68342 -0.0976315 8.31658 0.292892 8.70711L6.65685 15.0711C7.04738 15.4616 7.68054 15.4616 8.07107 15.0711C8.46159 14.6805 8.46159 14.0474 8.07107 13.6569L2.41421 8L8.07107 2.34315C8.46159 1.95262 8.46159 1.31946 8.07107 0.928932C7.68054 0.538408 7.04738 0.538408 6.65685 0.928932L0.292892 7.29289ZM21 7L1 7V9L21 9V7Z" fill="white"></path>
+						</svg>
+					</button>
+					<div class="slider-dots"></div>
+					<button type="button" data-control="slickNext">
+						<svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg" class="uk-preserve uk-svg">
+							<path d="M1 7C0.447715 7 4.82823e-08 7.44772 0 8C-4.82823e-08 8.55228 0.447715 9 1 9L1 7ZM21.7071 8.70711C22.0976 8.31658 22.0976 7.68342 21.7071 7.2929L15.3431 0.928933C14.9526 0.538409 14.3195 0.538409 13.9289 0.928933C13.5384 1.31946 13.5384 1.95262 13.9289 2.34315L19.5858 8L13.9289 13.6569C13.5384 14.0474 13.5384 14.6805 13.9289 15.0711C14.3195 15.4616 14.9526 15.4616 15.3431 15.0711L21.7071 8.70711ZM1 9L21 9L21 7L1 7L1 9Z" fill="white"></path>
+						</svg>
+					</button>
+					<button type="button" data-control="slickPlay">
+						<svg width="13" height="13" viewBox="0 0 13 13" xmlns="http://www.w3.org/2000/svg" class="uk-preserve uk-svg">
+							<path d="M12.3155 5.45033L2.10095 0.166757C1.27102 -0.262327 0 0.154063 0 1.21535V11.78C0 12.7321 1.18106 13.3059 2.10095 12.8285L12.3155 7.54751C13.2267 7.07781 13.2296 5.92004 12.3155 5.45033Z" fill="white"></path>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 13 13" xml:space="preserve" class="uk-preserve uk-svg" width="13" height="13">
+              <path class="st0" d="M2,13c-0.4,0-0.7-0.1-1.1-0.3C0.4,12.4,0,11.8,0,11.2V1.8c0-0.6,0.4-1.2,1-1.6c0.7-0.4,1.5-0.4,2.1,0L12,4.9 c0.6,0.3,1,0.9,1,1.6c0,0.7-0.4,1.3-1.1,1.6L3,12.7C2.7,12.9,2.3,13,2,13z M2,1.6c-0.1,0-0.2,0-0.3,0.1C1.6,1.7,1.6,1.8,1.6,1.8 v9.3c0,0,0,0.1,0.1,0.2c0.1,0.1,0.4,0.1,0.6,0l9-4.7c0.2-0.1,0.2-0.1,0.2-0.2c0-0.1,0-0.1-0.1-0.2l0,0l-9-4.7 C2.2,1.6,2.1,1.6,2,1.6z" fill="white"></path>
+            </svg>
+					</button>
+					<button type="button" data-control="slickPause">
+						<svg width="13" height="13" viewBox="0 0 13 13" xmlns="http://www.w3.org/2000/svg" class="uk-preserve uk-svg">
+							<path d="M5.57143 1.39286V11.6071C5.57143 12.3761 4.94754 13 4.17857 13H1.39286C0.623884 13 0 12.3761 0 11.6071V1.39286C0 0.623884 0.623884 0 1.39286 0H4.17857C4.94754 0 5.57143 0.623884 5.57143 1.39286ZM4.17857 11.433V1.56696C4.17857 1.47121 4.10022 1.39286 4.00446 1.39286H1.56696C1.47121 1.39286 1.39286 1.47121 1.39286 1.56696V11.433C1.39286 11.5288 1.47121 11.6071 1.56696 11.6071H4.00446C4.10022 11.6071 4.17857 11.5288 4.17857 11.433ZM13 1.39286V11.6071C13 12.3761 12.3761 13 11.6071 13H8.82143C8.05245 13 7.42857 12.3761 7.42857 11.6071V1.39286C7.42857 0.623884 8.05245 0 8.82143 0H11.6071C12.3761 0 13 0.623884 13 1.39286ZM11.6071 11.433V1.56696C11.6071 1.47121 11.5288 1.39286 11.433 1.39286H8.99554C8.89978 1.39286 8.82143 1.47121 8.82143 1.56696V11.433C8.82143 11.5288 8.89978 11.6071 8.99554 11.6071H11.433C11.5288 11.6071 11.6071 11.5288 11.6071 11.433Z" fill="white"></path>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 13 13" xml:space="preserve" class="uk-preserve uk-svg" width="13" height="13">
+              <path class="st0" d="M5.6,1.4v10.2c0,0.8-0.6,1.4-1.4,1.4H1.4C0.6,13,0,12.4,0,11.6V1.4C0,0.6,0.6,0,1.4,0h2.8 C4.9,0,5.6,0.6,5.6,1.4z M13,1.4v10.2c0,0.8-0.6,1.4-1.4,1.4H8.8c-0.8,0-1.4-0.6-1.4-1.4V1.4C7.4,0.6,8.1,0,8.8,0h2.8 C12.4,0,13,0.6,13,1.4z" fill="white"></path>
+            </svg>
+					</button>
 				</div>
 			</div>
-		{%- endfor -%}
+		</div>
 	{%- endif -%}
-
-	{%- if section.settings.show_arrow_down -%}
-		<a href="#" class="slider__scroll-down" title="{{ 'homepage.onboarding.slideshow.scroll_down' | t }}"{% if forloop.index > 1 %} tabindex="-1"{% endif %} data-scroll-down>
-			{%- render 'icon-arrow-down' -%}
-		</a>
-	{%- endif -%}
-</div>
+</section>
 
 {% schema %}
 {
-	"name": "Slideshow",
-	"max_blocks": 10,
-	"class": "slideshow transparent-header",
-	"settings": [
-		{
-			"type": "header",
-			"content": "layout"
-		},
-		{
-			"type": "select",
-			"id": "slide_height",
-			"label": "Height",
-			"default": "one-hundred-height-hero",
-			"options": [
-				{
-					"value": "one-hundred-height-hero",
-					"label": "Full screen"
-				},
-				{
-					"value": "original-height",
-					"label": "Original"
-				},
-				{
-					"value": "seven-fifty-height-hero",
-					"label": "750px"
-				},
-				{
-					"value": "sixty-fifty-height-hero",
-					"label": "650px"
-				},
-				{
-					"value": "five-fifty-height-hero ",
-					"label": "550px"
-				},
-				{
-					"value": "four-fifty-height-hero",
-					"label": "450px"
-				}
-			]
-		},
-		{
-			"type": "select",
-			"id": "content_alignment",
-			"label": "Content alignment",
-			"default": "center",
-			"options": [
-				{ "value": "left", "label": "Left" },
-				{ "value": "center", "label": "Center" },
-				{ "value": "right", "label": "Right" },
-				{ "value": "bottom-left", "label": "Bottom left" },
-				{ "value": "bottom-right", "label": "Bottom right" }
-			]
-		},
-		{
-			"type": "checkbox",
-			"id": "show_nav_dots",
-			"label": "Show slide navigation dots",
-			"default": true
-		},
-		{
-			"type": "checkbox",
-			"id": "show_nav_arrows",
-			"label": "Show slide navigation arrows",
-			"default": true
-		},
-		{
-			"type": "checkbox",
-			"id": "show_arrow_down",
-			"label": "Show down arrow",
-			"default": false
-		},
-		{
-			"type": "header",
-			"content": "Autoplay"
-		},
-		{
-			"type": "checkbox",
-			"id": "autoplay",
-			"label": "Autoplay slideshow",
-			"default": false
-		},
-		{
-			"type": "range",
-			"id": "duration",
-			"min": 2,
-			"max": 5,
-			"step": 1,
-			"unit": "sec",
-			"label": "Change slides every",
-			"default": 4
-		},
-		{
-			"type": "select",
-			"id": "transition",
-			"label": "Transition style",
-			"default": "slide",
-			"options": [
-				{ "label": "Slide", "value": "slide" },
-				{ "label": "Fade", "value": "fade" },
-				{ "label": "Zoom out", "value": "zoom-out" }
-			]
-		}
-	],
-	"blocks": [
-		{
-			"type": "image",
-			"name": "Slide",
-			"settings": [
-				{
-					"type": "header",
-					"content": "Image"
-				},
-				{
-					"type": "image_picker",
-					"id": "image",
-					"label": "Image",
-					"info": "2048px width recommended"
-				},
-				{
-					"type": "image_picker",
-					"id": "image_mobile",
-					"label": "Mobile image",
-					"info": "Optional"
-				},
-				{
-					"type": "select",
-					"id": "bg_position",
-					"label": "Position",
-					"default": "center-center",
-					"options": [
-						{ "label": "Top", "value": "center-top" },
-						{ "label": "Right", "value": "right-center" },
-						{ "label": "Center", "value": "center-center" },
-						{ "label": "Left", "value": "left-center" },
-						{ "label": "Bottom", "value": "center-bottom" }
-					]
-				},
-				{
-					"type": "range",
-					"id": "overlay_opacity",
-					"label": "Overlay opacity",
-					"min": 0,
-					"max": 95,
-					"step": 5,
-					"unit": "%",
-					"default": 20
-				},
-				{
-					"type": "header",
-					"content": "Text"
-				},
-				{
-					"type": "select",
-					"id": "text_color",
-					"label": "Color",
-					"default": "text-light",
-					"options": [
-						{
-							"value": "text-light",
-							"label": "Light"
-						},
-						{
-							"value": "text-dark",
-							"label": "Dark"
-						}
-					]
-				},
-				{
-					"type": "text",
-					"id": "title",
-					"label": "Heading",
-					"default": "Welcome to Palo Alto"
-				},
-				{
-					"type": "textarea",
-					"id": "slide_subheading",
-					"label": "Subheading",
-					"default": "This subheading helps you provide some more detail to the title above."
-				},
-				{
-					"type": "header",
-					"content": "Buttons"
-				},
-				{
-					"type": "text",
-					"id": "slide_btn_text",
-					"label": "Button text",
-					"default": "Welcome"
-				},
-				{
-					"type": "url",
-					"id": "slide_btn_link",
-					"label": "Button URL"
-				},
-				{
-					"type": "select",
-					"id": "slide_btn_style",
-					"label": "Button style",
-					"default": "primary",
-					"options": [
-						{ "label": "Primary", "value": "primary" },
-						{ "label": "Secondary", "value": "secondary" }
-					]
-				},
-				{
-					"type": "text",
-					"id": "slide_btn_text_2",
-					"label": "Second button text"
-				},
-				{
-					"type": "url",
-					"id": "slide_btn_link_2",
-					"label": "Second button URL"
-				},
-				{
-					"type": "select",
-					"id": "slide_btn_style_2",
-					"label": "Second button style",
-					"default": "secondary",
-					"options": [
-						{ "label": "Primary", "value": "primary" },
-						{ "label": "Secondary", "value": "secondary" }
-					]
-				},
-				{
-					"type": "text",
-					"id": "video_btn_text",
-					"label": "Video button text",
-					"default": "Watch the Video"
-				},
-				{
-					"type": "video_url",
-					"id": "video_btn_link",
-					"label": "Video URL",
-					"accept": [
-						"youtube",
-						"vimeo"
-					],
-					"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
-				}
-			]
-		}
-	],
-	"presets": [
-		{
-			"name": "Slideshow",
-			"category": "Image",
-			"blocks": [
-				{
-					"type": "image"
-				},
-				{
-					"type": "image"
-				}
-			]
-		}
-	]
+"name": "Slideshow",
+"max_blocks": 5,
+"blocks": [
+{
+"type": "image",
+"name": "Slide",
+"settings": [
+{
+"type": "header",
+"content": "Image"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image",
+"info": "2048px width recommended"
+},
+{
+"type": "header",
+"content": "Text"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Heading",
+"default": "Aussie Ballers Winter Collection"
+},
+{
+"type": "text",
+"id": "slide_subheading",
+"label": "Subheading",
+"default": "Winter 2020/2021 Collection"
+},
+{
+"type": "header",
+"content": "Buttons"
+},
+{
+"type": "text",
+"id": "slide_btn_text",
+"label": "Button text",
+"default": "Shop Now"
+},
+{
+"type": "url",
+"id": "slide_btn_link",
+"label": "Button URL"
 }
+]
+}
+],
+"presets": [
+{
+"name": "Slideshow",
+"category": "Image",
+"blocks": [
+{
+"type": "image"
+},
+{
+"type": "image"
+}
+]
+}
+]
+}
+
 {% endschema %}

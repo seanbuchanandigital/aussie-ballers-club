@@ -1,0 +1,152 @@
+.btn-default {
+  @animate (background-color, color);
+  display: inline-block;
+  border: 2px solid transparent;
+  text-transform: uppercase;
+  padding: 10px 30px;
+  font-weight: 500;
+}
+.btn-default.inverse {
+  color: #2C466E;
+  background-color: #FFFFFF;
+}
+.btn-default.inverse:hover {
+  color: #FFFFFF;
+  background-color: #2C466E;
+}
+
+.slider-controls {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+  padding: 10px;
+  background-color: #2C466E;
+}
+.slider-controls::before {
+  content: "";
+  position: absolute;
+  width: 100vw;
+  left: -100vw;
+  height: 36px;
+  background-color: #2C466E;
+}
+.slider-controls .slick-dots {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 10px;
+  bottom: 0;
+}
+.slider-controls .slick-dots li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: column;
+  justify-content: center;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  width: calc(20px * .75);
+  height: calc(20px * .75);
+}
+.slider-controls .slick-dots li.slick-active {
+  background-color: #FFFFFF;
+}
+.slider-controls .slick-dots li:not(:last-child) {
+  margin: 0 10px 0 0;
+}
+.slider-controls .slick-dots li:last-child {
+  margin: 0;
+}
+.slider-controls button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.slider-controls button[data-control=slickPrev] svg,
+.slider-controls button[data-control=slickNext] svg {
+  width: 22px;
+  height: 16px;
+}
+.slider-controls button[data-control=slickPlay] {
+  margin: 0 calc(20px / 2) 0 10px;
+}
+.slider-controls button[data-control=slickPlay] svg,
+.slider-controls button[data-control=slickPause] svg {
+  width: 13px;
+  height: 13px;
+}
+.slider-controls button[data-control=slickPlay] svg:nth-child(2),
+.slider-controls button[data-control=slickPause] svg:nth-child(2) {
+  display: none;
+}
+
+.abc-slideshow {
+  position: relative;
+}
+.abc-slideshow .slick-item {
+  position: relative;
+  width: 100%;
+  height: 350px;
+}
+.abc-slideshow .slick-item .background-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.abc-slideshow .slick-item .background-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #2c466e 0%, rgba(255, 255, 255, 0.2) 100%);
+}
+.abc-slideshow .slick-item .wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  z-index: 1;
+}
+.abc-slideshow .slick-item .wrapper .card {
+  padding: 20px 0;
+  max-width: 500px;
+}
+.abc-slideshow .slick-item .wrapper .card .tag-line {
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.abc-slideshow .slick-item .wrapper .card h2 {
+  margin-bottom: 20px;
+}
+.abc-slideshow .slick-item .wrapper .card > *:not(.btn-default) {
+  color: #FFFFFF;
+}
+.abc-slideshow .slick-slider-controls {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+@media only screen and (min-width: 640px) {
+  .abc-slideshow .slick-item {
+    height: 500px;
+  }
+  .abc-slideshow .slick-item .wrapper .card h2 {
+    font-size: 64px;
+  }
+}
