@@ -3,6 +3,7 @@
 // Globals
 @import 'globals/mixins';
 @import 'globals/button';
+@import 'globals/global';
 
 // Components
 @import 'components/component-slide';
@@ -10,3 +11,5 @@
 
 // Panels
 @import 'panels/panel-slideshow';
+@import 'panels/panel-list-collection';
+@import 'panels/panel-product-grid';

@@ -1,0 +1,73 @@
+.abc-list-collection {
+  background-color: $color-grey-light;
+  padding: calc(#{$section-padding} / 2) 0;
+
+  .title {
+    padding-bottom: $p-2;
+
+    .tag-line {
+      color: $color-brand-primary;
+    }
+
+    h2,
+    .tag-line {
+      text-transform: uppercase;
+    }
+  }
+
+  .slick-slider {
+    .slick-list {
+      overflow: visible;
+    }
+  }
+
+  .slick-item .card {
+    display: inline-block;
+    margin: 0 calc(#{$p-2} * .75);
+    text-align: center;
+
+    &:first-child {
+      margin: 0 calc(#{$p-2} * .75) 0 0;
+    }
+
+    img {
+      margin-bottom: $p-1;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    label {
+      display: block;
+    }
+
+    h3 {
+      margin-bottom: calc(#{$p-1} / 2);
+    }
+  }
+
+  .slick-slider-controls {
+    text-align: center;
+  }
+
+  .slider-controls button svg path {
+    fill: $color-brand-primary;
+  }
+
+  .slider-controls .slick-dots {
+    li {
+      border-color: $color-brand-primary;
+
+      &.slick-active {
+        background-color: $color-brand-primary;
+      }
+    }
+  }
+
+  @include for-tablet {
+    padding: $section-padding 0;
+
+    .title {
+      padding-bottom: $p-4;
+    }
+  }
+}

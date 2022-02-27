@@ -1,0 +1,8 @@
+.abc-product-grid {
+  padding: calc(#{$section-padding} / 2) 0;
+
+
+  @include for-tablet {
+    padding: $section-padding 0;
+  }
+}

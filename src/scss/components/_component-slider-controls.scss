@@ -2,16 +2,6 @@
   @include flex(inline-flex, row, center, center, center);
   position: relative;
   padding: $p-1;
-  background-color: $color-brand-primary;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100vw;
-    left: -100vw;
-    height: 36px;
-    background-color: $color-brand-primary;
-  }
 
   .slick-dots {
     @include flex(flex, row, center, center, center);

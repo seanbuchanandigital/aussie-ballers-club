@@ -1,6 +1,14 @@
 .abc-slideshow {
   position: relative;
 
+  .slick-dotted.slick-slider {
+    margin-bottom: 0;
+  }
+
+  .slick-initialized .slick-slide {
+    @include flex(flex, column, center, center, center);
+  }
+
   .slick-item {
     position: relative;
     width: 100%;
@@ -52,9 +60,23 @@
   }
 
   .slick-slider-controls {
+    @include flex(flex, column, center, center, center);
     position: absolute;
     left: 0;
     bottom: 0;
+  }
+
+  .slider-controls {
+    background-color: $color-brand-primary;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100vw;
+      left: -100vw;
+      height: 36px;
+      background-color: $color-brand-primary;
+    }
   }
 
   @include for-tablet {
