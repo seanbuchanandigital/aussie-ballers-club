@@ -1,0 +1,52 @@
+.abc-product-feature {
+  position: relative;
+  background-color: $color-brand-primary;
+
+  .background-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .card {
+    padding: $section-padding calc(#{$section-padding} / 2) $section-padding calc(#{$section-padding} / 2);
+
+    *:not(.btn-default) {
+      color: white;
+    }
+
+    .tag-line {
+      color: $color-brand-primary;
+      margin-bottom: $p-1;
+    }
+
+    h2 {
+      font-size: 48px;
+      margin-bottom: $p-2;
+    }
+
+    .tag-line,
+    h2 {
+      text-transform: uppercase;
+    }
+  }
+
+  @include for-tablet {
+    .background-image {
+      position: absolute;
+      left: 460px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: unset;
+      height: unset;
+    }
+
+    .card {
+      max-width: 400px;
+    }
+  }
+}

@@ -4,7 +4,9 @@ slideshowConfig = {
     settings: {
         arrows: false,
         dots: true,
-        appendDots: null
+        appendDots: null,
+        autoplay: true,
+        autoplaySpeed: 2000,
     }
 }
 

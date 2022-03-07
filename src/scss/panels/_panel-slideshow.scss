@@ -41,12 +41,11 @@
     }
 
     .wrapper .card {
-      padding: $p-2 0;
+      padding: $section-padding calc(#{$section-padding} / 2) $section-padding calc(#{$section-padding} / 2);
       max-width: 500px;
     }
 
     .wrapper .card .tag-line {
-      text-transform: uppercase;
       margin-bottom: $p-1;
     }
 
@@ -56,6 +55,11 @@
 
     .wrapper .card > *:not(.btn-default) {
       color: $color-white;
+    }
+
+    .wrapper .card .tag-line,
+    .wrapper .card h2 {
+      text-transform: uppercase;
     }
   }
 
@@ -68,6 +72,7 @@
 
   .slider-controls {
     background-color: $color-brand-primary;
+    padding: $p-1 $p-1 $p-1 $p-3;
 
     &::before {
       content: '';
@@ -84,8 +89,15 @@
       height: 500px;
 
       .wrapper .card h2 {
-        font-size: 64px;
+        font-size: 56px;
       }
+    }
+  }
+
+  @include for-laptop {
+    .slick-slider-controls {
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

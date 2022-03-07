@@ -20,19 +20,19 @@
 }
 
 @mixin for-tablet {
-  @media only screen and (min-width: map-get($break-points, small)){
+  @media only screen and (min-width: map-get($break-points, medium)){
     @content;
   }
 }
 
 @mixin for-laptop {
-  @media only screen and (min-width: map-get($break-points, small)){
+  @media only screen and (min-width: map-get($break-points, large)){
     @content;
   }
 }
 
 @mixin for-desktop {
-  @media only screen and (min-width: map-get($break-points, small)){
+  @media only screen and (min-width: map-get($break-points, xlarge)){
     @content;
   }
 }

@@ -3,7 +3,7 @@ $color-brand-primary: #2C466E;
 $color-brand-secondary: #A92E31;
 
 $color-white: #FFFFFF;
-$color-black: #A92E31;
+$color-black: #000000;
 $color-grey-dark: #666666;
 $color-grey-light: #E5E5E5;
 
@@ -17,8 +17,8 @@ $section-padding: 60px;
 
 // Breakpoints
 $break-points: (
-  small: 640px,
-  medium: 960px,
-  large: 1200px,
+  small: 480px,
+  medium: 767px,
+  large: 1320px,
   xlarge: 1600px,
 );

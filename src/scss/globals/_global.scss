@@ -1,7 +1,7 @@
 .row {
-  @include flex(row, unset, unset, unset);
+  @include flex(flex, row, unset, unset, unset);
 }
 
 .col {
-  @include flex(column, unset, unset, unset);
+  @include flex(flex, column, unset, unset, unset);
 }
